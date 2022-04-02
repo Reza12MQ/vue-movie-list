@@ -19,26 +19,49 @@
     <div class="my-3">
         <h4>Search Result</h4>
     </div>
+
     <div class="row row-cols-4 g-4">
         <div v-for="item in items" :key="item.imdbID" class="col">
-        <div class="card">
-            <img
-            v-bind:src="item.Poster"
-            class="card-img-top"
-            v-bind:alt="item.Title"
-            />
-            <div class="card-body">
-            <h5 class="card-title">{{ item.Title }}</h5>
-            <p class="card-text">Year: {{ item.Year }}</p>
-            <router-link :to="'/movie/'+item.imdbID" class="btn btn-outline-primary">Movie Detail</router-link>
+          <div class="card">
+            <div @click="popupImage(item.Poster)">
+              <img
+              v-bind:src="item.Poster"
+              class="card-img-top"
+              v-bind:alt="item.Title"
+              />
             </div>
-        </div>
+              <div class="card-body">
+                <h5 class="card-title">{{ item.Title }}</h5>
+                <p class="card-text">Year: {{ item.Year }}</p>
+                <router-link :to="'/movie/'+item.imdbID" class="btn btn-outline-primary">Movie Detail</router-link>
+              </div>
+          </div>
         </div>
     </div>
+
+    <div class="modal fade" ref="exampleModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn-close" @click="modal.hide()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex justify-content-center">
+              <img
+              v-bind:src="imgdata"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </template>
 
 <script>
 import axios from "axios";
+import { Modal } from 'bootstrap';
+
 export default {
   name: "App",
 
@@ -49,6 +72,8 @@ export default {
       page: 1,
       title: "Batman",
       totalResults: null,
+      modal: null,
+      imgdata: null
     };
   },
 
@@ -95,6 +120,11 @@ export default {
         }
       };
     },
+
+    popupImage(imgUrl) {
+      this.imgdata = imgUrl;
+      this.modal.show();
+    }
   },
 
   computed: {
@@ -113,6 +143,7 @@ export default {
 
   mounted() {
     this.getNextUser();
+    this.modal = new Modal(this.$refs.exampleModal);
   },
 };
 </script>
