@@ -1,8 +1,7 @@
 <template>
   <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
+    <div class="container">
       <router-link class="navbar-brand" to="/">Movies</router-link>
-
     </div>
   </nav>
   
